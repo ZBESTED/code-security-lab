@@ -6,8 +6,16 @@ steps:
   args: ['push', 'asia-southeast1-docker.pkg.dev/$PROJECT_ID/code-lab-repo-260511/app:$BUILD_ID']
   id: 'push-image'
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: gcloud
-  args: ['run', 'deploy', 'code-lab-app', '--image=asia-southeast1-docker.pkg.dev/$PROJECT_ID/code-lab-repo-260511/app:$BUILD_ID', '--region=asia-southeast1', '--platform=managed', '--no-allow-unauthenticated']
+  entrypoint: bash
+  args: 
+  - '-c'
+  - |
+    gcloud run deploy code-lab-app \
+      --image=asia-southeast1-docker.pkg.dev/$PROJECT_ID/code-lab-repo-260511/app:$BUILD_ID \
+      --region=asia-southeast1 \
+      --platform=managed \
+      --no-allow-unauthenticated \
+      --update-secrets=APP_SECRET=my-secret:latest
   id: 'deploy'
 images: ['asia-southeast1-docker.pkg.dev/$PROJECT_ID/code-lab-repo-260511/app:$BUILD_ID']
 options:
